@@ -11,4 +11,11 @@ class Post extends Model
 
     // protected $fillable = ['title', 'author', 'slug', 'excerpt', 'body'];
     protected $guarded = ['id'];
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
+
+

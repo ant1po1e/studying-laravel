@@ -3,13 +3,11 @@
 
 @section('container')
 
-<article class="mb-5">
+<article class="mb-3 border-bottom border-3 pb-3">
     <h1>{{ $post->title }}</h1>
-    <h3>By: {{ $post->author }}</h3>
-    {!! $post->body !!} 
-
+    <h3 class="pb-3">By: <a class="text-decoration-none" href="/authors/{{ $post->user->id }}">{{ $post->user->name }}</a></h3>
+    <div class="pb-3">{!! $post->body !!}</div>
+    <a href="/blog" class="text-decoration-none fw-bold d-block">Back to main</a>
 </article>
-
-<a href="/blog">Back to main</a>
 
 @endsection
