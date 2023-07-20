@@ -3,6 +3,9 @@
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterController;
 
 
 /*
@@ -28,19 +31,8 @@ Route::get('/about', function () {
     ]);
 });
 
-Route::get('/blog', function () {
-    return view('blog', [
-        "title" => "Blogs",
-        "posts" => Post::alL()
-    ]);
-});
-
-Route::get('posts/{post:slug}', function (Post $post) {
-    return view('post', [
-        "title" => "Single Post", 
-        "post" => $post
-    ]);
-});
+Route::get('/posts', [PostController::class, 'index']);
+Route::get('/post', [PostController::class, 'show']);
 
 Route::get('/authors/{author:username}', function(User $author) {
     return view('post', [
@@ -48,3 +40,7 @@ Route::get('/authors/{author:username}', function(User $author) {
         'post' => $author->post->load('author')
     ]);
 });
+
+Route::get('/login', [LoginController::class, 'index']);
+Route::get('/register', [RegisterController::class, 'index']);
+Route::post('/register', [RegisterController::class, 'store']);
