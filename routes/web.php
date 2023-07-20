@@ -45,6 +45,6 @@ Route::get('posts/{post:slug}', function (Post $post) {
 Route::get('/authors/{author:username}', function(User $author) {
     return view('post', [
         'title' => 'User Post',
-        'post' => $author->post
+        'post' => $author->post->load('author')
     ]);
 });
