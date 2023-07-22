@@ -31,11 +31,30 @@
                     </li>
                 </ul>
 
+                @auth
+                <div class="btn-group ms-auto">
+                    <button type="button" class="btn btn-black text-white dropdown-toggle border-0" data-bs-toggle="dropdown" aria-expanded="false">
+                      {{ auth()->user()->username }}
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="/dashboard"><i class="bi bi-layout-text-sidebar-reverse"></i> Dashboard</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li>
+                        <form action="/logout" method="post">
+                            @csrf
+                            <button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-left"></i> Logout</a></button>
+                        </form>
+                      </li>
+                    </ul> 
+                  </div>
+                @else
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a href="/login" class="nav-link {{ ($title === "Login") ? 'active' : '' }}"><i class="bi bi-box-arrow-in-right"></i> Login</a>
                     </li>
                 </ul>
+                @endauth
+
             </div>
         </div>
     </nav>
