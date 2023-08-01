@@ -10,7 +10,8 @@
         @csrf
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
-            <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" required autofocus value="{{ old('title') }}">
+            <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title"
+                required autofocus value="{{ old('title') }}">
             @error('title')
             <div class="invalid-feedback">
                 {{ $message }}
@@ -20,13 +21,14 @@
 
         <div class="mb-3">
             <label for="slug" class="form-label">Slug</label>
-            <input type="text" class="form-control @error('slug') is-invalid @enderror" id="slug" name="slug" required readonly value="{{ old('slug') }}">
+            <input type="text" class="form-control @error('slug') is-invalid @enderror" id="slug" name="slug" required
+                readonly value="{{ old('slug') }}">
             @error('slug')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
             @enderror
-        </div>  
+        </div>
 
         <div class="mb-3">
             <label for="image" class="form-label">Post Banner</label>
@@ -34,7 +36,7 @@
             @error('image')
             <div class="invalid-feedback">
                 {{ $message }}
-            </div>    
+            </div>
             @enderror
         </div>
 
@@ -43,9 +45,9 @@
             <input id="body" type="hidden" name="body" required value="{{ old('body') }}">
             <trix-editor input="body"></trix-editor>
             @error('body')
-                <div class="invalid-feedback">
+            <div class="invalid-feedback">
                 {{ $message }}
-                </div>
+            </div>
             @enderror
         </div>
 
@@ -57,16 +59,16 @@
     const title = document.querySelector('#title');
     const slug = document.querySelector('#slug');
 
-    title.addEventListener('change', function() {
+    title.addEventListener('change', function () {
         fetch('/dashboard/posts/checkSlug?title=' + title.value)
             .then(response => response.json())
-            .then(data => slug.value = data.slug) 
+            .then(data => slug.value = data.slug)
     })
 
-    document.addEventListener('trix-file-accept', function(e)
-    {
+    document.addEventListener('trix-file-accept', function (e) {
         e.preventDefault();
     })
+
 </script>
 
 @endsection
