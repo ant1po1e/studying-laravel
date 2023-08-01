@@ -33,7 +33,7 @@ Route::get('/about', function () {
 });
 
 Route::get('/posts', [PostController::class, 'index']);
-Route::get('/post', [PostController::class, 'show']);
+Route::get('/post/{post:slug}', [PostController::class, 'show']);
 
 Route::get('/authors/{author:username}', function(User $author) {
     return view('post', [
@@ -53,4 +53,5 @@ Route::get('/dashboard', function(){
     return view('dashboard.index');
 })->middleware('auth');
 
+Route::get('/dashboard/posts/checkSlug', [DashboardPostController::class, 'checkSlug'])->middleware('auth');
 Route::resource('/dashboard/posts', DashboardPostController::class)->middleware('auth');

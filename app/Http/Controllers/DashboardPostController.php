@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use \Cviebrock\EloquentSluggable\Services\SlugService;
 
 class DashboardPostController extends Controller
 {
@@ -15,7 +17,7 @@ class DashboardPostController extends Controller
     public function index()
     {
         return view('dashboard.posts.index', [
-            'posts' => Post::where('user_id', auth()->user()->id)->get()
+            'posts' => Post::where('user_id', auth()->user()->id)->get(),
         ]);
     }
 
@@ -26,7 +28,7 @@ class DashboardPostController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.posts.create');
     }
 
     /**
@@ -37,7 +39,24 @@ class DashboardPostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validateData = $request->validate([
+            'title' => 'required|max:255',
+            'slug' => 'required|unique:posts',
+            'image' => 'image|file|max:1024',
+            'body' => 'required'
+        ]);
+
+        if ($request->file('image'))
+        {
+            $validateData['image'] = $request->file('image')->store('post-images');
+        }
+
+        $validateData['user_id'] = auth()->user()->id;
+        $validateData['excerpt'] = Str::limit(strip_tags($request->body), 100);
+
+        Post::create($validateData);
+
+        return redirect('/dashboard/posts')->with('success', 'New post has been added');
     }
 
     /**
@@ -48,7 +67,7 @@ class DashboardPostController extends Controller
      */
     public function show(Post $post)
     {
-        return view('dashboard/posts/show', [
+        return view('dashboard.posts.show', [
             'post' => $post
         ]);
     }
@@ -61,7 +80,9 @@ class DashboardPostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view('dashboard.posts.edit', [
+            'post' => $post
+        ]);
     }
 
     /**
@@ -73,7 +94,25 @@ class DashboardPostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $rules = [
+            'title' => 'required|max:255',
+            'body' => 'required'
+        ];
+
+        if($request->slug != $post->slug)
+        {
+            $rules['slug'] = 'required|unique:posts';
+        }
+
+        $validateData = $request->validate($rules);
+
+        $validateData['user_id'] = auth()->user()->id;
+        $validateData['excerpt'] = Str::limit(strip_tags($request->body), 200);
+
+        Post::where('id', $post->id)
+        ->update($validateData);
+
+        return redirect('/dashboard/posts')->with('success', 'Post has been updated');
     }
 
     /**
@@ -84,6 +123,14 @@ class DashboardPostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        Post::destroy($post->id);
+
+        return redirect('/dashboard/posts')->with('success', 'Post has been deleted');
+    }
+
+    public function checkSlug(Request $request)
+    {
+        $slug = SlugService::createSlug(Post::class, 'slug', $request->title);
+        return response()->json(['slug' => $slug]);
     }
 }

@@ -14,7 +14,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2 {{ Request::is('dashboard/posts') ? 'text-primary' : 'text-dark' }}" href="/dashboard/posts">
+                    <a class="nav-link d-flex align-items-center gap-2 {{ Request::is('dashboard/posts*') ? 'text-primary' : 'text-dark' }}" href="/dashboard/posts">
                         <i class="bi bi-card-text"></i> My Posts
                     </a>
                 </li>
